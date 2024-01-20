@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:gestion_projet2/Dashboard.dart';
-import 'package:gestion_projet2/Dashbord.dart';
-import 'package:gestion_projet2/Task.dart';
-import 'package:gestion_projet2/Project.dart';
-
+import 'package:gestion_projet2/DashboardScreen.dart';
+import 'package:gestion_projet2/Project.dart';  // Assurez-vous que le chemin est correct
 
 class ProjectCreationScreen extends StatefulWidget {
   @override
@@ -17,8 +14,7 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
   late TextEditingController endDateController;
   late TextEditingController budgetController;
 
-  List<Project> projects = []; // Déclarez la liste de projets
-  List<Task> tasks = []; // Déclarez la liste de tâches
+  List<Project> projects = [];
 
   @override
   void initState() {
@@ -57,39 +53,32 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
               decoration: InputDecoration(labelText: 'Budget'),
             ),
             SizedBox(height: 16.0),
-           ElevatedButton(
-  onPressed: () async {
-    // Crée un nouveau projet avec les informations saisies
-    Project newProject = Project(
-      name: projectNameController.text,
-      startDate: DateTime.parse(startDateController.text),
-      endDate: DateTime.parse(endDateController.text),
-      budget: double.parse(budgetController.text),
-    );
+            ElevatedButton(
+              onPressed: () async {
+                Project newProject = Project(
+                  name: projectNameController.text,
+                 // startDate: DateTime.parse(startDateController.text),
+                  //endDate: DateTime.parse(endDateController.text),
+                  budget: double.parse(budgetController.text)
+                );
 
-    // Ajoute le nouveau projet à la collection "projects" dans Firestore
-    await FirebaseFirestore.instance.collection('projects').add(newProject.toMap());
+                await FirebaseFirestore.instance.collection('projects').add(newProject.toMap());
 
-    // Affiche un message pour indiquer que le projet a été créé
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Projet créé avec succès!'),
-      ),
-    );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Projet créé avec succès!'),
+                  ),
+                );
 
-    // Navigue vers le tableau de bord
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Dashboard(projects: projects, tasks: tasks),
-      ),
-    );
-  },
-  child: Text('Créer le projet'),
-),
-
-
-
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DashboardScreen(),  // Assurez-vous que le nom de la classe est correct
+                  ),
+                );
+              },
+              child: Text('Créer le projet'),
+            ),
           ],
         ),
       ),
